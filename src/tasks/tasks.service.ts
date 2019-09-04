@@ -15,8 +15,13 @@ export class TasksService {
         return this.tasks.find(t => t.id === id)
     }
 
-    createTask(createTaskDto: CreateTaskDto): Task{
-        const {title, description} = createTaskDto
+    deleteTask(id: string): Task[] {
+        this.tasks = this.tasks.filter(t => t.id !== id)
+        return this.tasks
+    }
+
+    createTask(createTaskDto: CreateTaskDto): Task {
+        const { title, description } = createTaskDto
 
         const task: Task = {
             id: uuid(),
@@ -26,6 +31,13 @@ export class TasksService {
         }
         
         this.tasks.push(task)
+
+        return task
+    }
+
+    updateTaskStatus(id: string, status: TaskStatus): Task {
+        const task: Task = this.getTaskById(id)
+        task.status = status
 
         return task
     }
