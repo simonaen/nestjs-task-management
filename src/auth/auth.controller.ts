@@ -1,6 +1,6 @@
-import { Controller, Post, Body, ValidationPipe, UnauthorizedException } from '@nestjs/common';
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { AuthService } from './auth.service';
+import { Controller, Post, Body, ValidationPipe } from '@nestjs/common'
+import { AuthCredentialsDto } from './dto/auth-credentials.dto'
+import { AuthService } from './auth.service'
 
 @Controller('auth')
 export class AuthController {
@@ -9,16 +9,13 @@ export class AuthController {
     ) {}
 
     @Post('signup')
-    signUp(@Body(ValidationPipe) authCredDto: AuthCredentialsDto): Promise<void> {
+    signUp(@Body(ValidationPipe) authCredDto: AuthCredentialsDto): Promise<void>  {
         return this.authService.signUp(authCredDto)
     }
 
     @Post('signin')
-    async signIn(@Body(ValidationPipe) authCredDto: AuthCredentialsDto): Promise<void> {
-        const username = await this.authService.signIn(authCredDto)
-        
-        if (!username) {
-            throw new UnauthorizedException('Invalid credentials')
-        }
+    async signIn(@Body(ValidationPipe) authCredDto: AuthCredentialsDto): Promise<{accessToken: string}> {
+        return this.authService.signIn(authCredDto)
     }
+
 }
